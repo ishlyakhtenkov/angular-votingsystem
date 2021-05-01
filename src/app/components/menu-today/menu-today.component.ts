@@ -13,7 +13,8 @@ export class MenuTodayComponent implements OnInit {
 
   menu: Menu = new Menu();
 
-  newDishes: Dish[] = [];
+  // newDishes: Dish[] = [];
+  isUpdated: boolean = false;
 
   @Input()
   restaurantId: string;
@@ -42,7 +43,19 @@ export class MenuTodayComponent implements OnInit {
     let dish: Dish = new Dish();
     dish.name = "sapogi";
     dish.price = 200;
-    this.newDishes.push(dish);
+    this.menu.dishes.push(dish);
+    this.isUpdated = true;
+  }
+
+  deleteDish(dishName: string) {
+    console.log("delete dish with name: " + dishName);
+    let index = this.menu.dishes.findIndex(tempDish => tempDish.name === dishName);
+    console.log("delete dish with index: " + index);
+    this.menu.dishes.splice(index, 1);
+    this.isUpdated = true;
+    for (let dish of this.menu.dishes) {
+      console.log("dish name " + dish.name);
+    }
   }
 
   publish() {
