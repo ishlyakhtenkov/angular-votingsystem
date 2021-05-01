@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Restaurant } from 'src/app/common/restaurant';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 
 @Component({
   selector: 'app-restaurant-details',
@@ -11,7 +12,9 @@ export class RestaurantDetailsComponent implements OnInit {
 
   restaurant: Restaurant = new Restaurant();
 
-  constructor(private route: ActivatedRoute) { }
+  voteButtonStatus: boolean = false;
+
+  constructor(private route: ActivatedRoute, private restaurantService: RestaurantService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(
@@ -19,6 +22,7 @@ export class RestaurantDetailsComponent implements OnInit {
         this.handleRestaurantDetails();
       }
     );
+    this.updateVoteButtonStatus();
   }
 
   handleRestaurantDetails() {
@@ -28,5 +32,15 @@ export class RestaurantDetailsComponent implements OnInit {
     this.restaurant.name = this.route.snapshot.queryParamMap.get('name');
     this.restaurant.address = this.route.snapshot.queryParamMap.get('address');
     this.restaurant.imageUrl = this.route.snapshot.queryParamMap.get('imageUrl');
+  }
+
+  updateVoteButtonStatus() {
+    this.restaurantService.voteButtonStatus.subscribe(
+      data => this.voteButtonStatus = data
+    );
+  }
+
+  vote() {
+    console.log("Vote for restaurant: id=" + this.restaurant.id);
   }
 }

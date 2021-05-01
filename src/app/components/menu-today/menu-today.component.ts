@@ -31,6 +31,7 @@ export class MenuTodayComponent implements OnInit {
     this.restaurantService.getMenuToday(+this.restaurantId).subscribe(
       data => {
         this.menu = data;
+        this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
       }
     );
   }
@@ -45,6 +46,7 @@ export class MenuTodayComponent implements OnInit {
     dish.price = 200;
     this.menu.dishes.push(dish);
     this.isUpdated = true;
+    this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
   }
 
   deleteDish(dishName: string) {
@@ -53,6 +55,7 @@ export class MenuTodayComponent implements OnInit {
     console.log("delete dish with index: " + index);
     this.menu.dishes.splice(index, 1);
     this.isUpdated = true;
+    this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
     for (let dish of this.menu.dishes) {
       console.log("dish name " + dish.name);
     }

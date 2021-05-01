@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Menu } from '../common/menu';
 import { Restaurant } from '../common/restaurant';
 
@@ -10,6 +10,8 @@ import { Restaurant } from '../common/restaurant';
 export class RestaurantService {
   
   private baseUrl = 'http://localhost:8080/votingsystem/rest/restaurants';
+
+  voteButtonStatus: Subject<boolean> = new Subject<boolean>();
 
   constructor(private httpClient: HttpClient) { }
 
@@ -29,5 +31,9 @@ export class RestaurantService {
 
   searchRestaurants(theKeyword: string): Observable<Restaurant[]> {
     return this.httpClient.get<Restaurant[]>(`${this.baseUrl}/by?name=${theKeyword}`);
+  }
+
+  showVoteButton(enabled: boolean) {
+    this.voteButtonStatus.next(enabled);
   }
 }

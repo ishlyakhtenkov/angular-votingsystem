@@ -10,6 +10,9 @@
     </div>
     <div class="row align-items-center">
         <h1 class="col-md-3">{{ restaurant.name }}</h1>
+        <div *ngIf="voteButtonStatus" class="col-md-5 text-right">
+            <button (click)="vote()" class="btn btn-primary">Want to lunch here!</button>
+        </div>
     </div>
     <div class="row mb-2">
         <h3 class="col-md-6">{{ restaurant.address }}</h3>
