@@ -1,9 +1,13 @@
-<div *ngIf="menu.dishes.length == 0" class="container">
+<!-- <div *ngIf="menu.dishes.length == 0" class="container">
+    <h4>The restaurant has not provided it's today's lunch menu yet</h4>
+</div> -->
+<div *ngIf="currentDishes.length == 0" class="container">
     <h4>The restaurant has not provided it's today's lunch menu yet</h4>
 </div>
-<div *ngIf="menu.dishes?.length > 0" class="container">
+
+<div *ngIf="currentDishes?.length > 0" class="container">
     <h3 class="mb-4">Today's Lunch Menu</h3>
-    <div *ngFor="let tempDish of menu.dishes">
+    <div *ngFor="let tempDish of currentDishes">
         <div class="row">
             <div class="col-md-5">
                 <h4 class="text-left">{{ tempDish.name }}</h4>
@@ -44,8 +48,15 @@
     </div>
 </div>
 
-<div class="row mt-4">
+<!-- <div class="row mt-4">
     <div *ngIf="isUpdated == true" class="col-md-12">
         <button (click)="publish()" class="btn btn-warning">Save changes</button>
     </div>
+</div> -->
+
+<div class="row mt-4">
+    <div *ngIf="!isEqual()" class="col-md-12">
+        <button (click)="publish()" class="btn btn-warning">Save changes</button>
+    </div>
 </div>
+
