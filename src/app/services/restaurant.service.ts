@@ -42,4 +42,8 @@ export class RestaurantService {
   showAddRestaurantButton(enabled: boolean) {
     this.addRestaurantButtonStatus.next(enabled);
   }
+
+  deleteRestaurant(theRestaurantId: number) {
+    console.log(`Delete restaurant with id = ${theRestaurantId}`);
+  }
 }

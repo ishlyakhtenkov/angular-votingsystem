@@ -14,7 +14,7 @@
             <a [routerLink]="['/restaurant-form']" 
                                 [queryParams]="{id: restaurant.id, name: restaurant.name, address: restaurant.address}" class="btn btn-warning mr-1">Update</a>
             <!-- <button class="btn btn-warning mr-1">Update</button> -->
-            <button class="btn btn-danger">Delete</button>
+            <button (click)="deleteRestaurant()" class="btn btn-danger">Delete</button>
             <span *ngIf="voteButtonStatus">
                 <button (click)="vote()" class="btn btn-primary ml-1">Want to lunch here!</button>
             </span>

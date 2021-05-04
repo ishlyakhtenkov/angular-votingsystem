@@ -44,4 +44,8 @@ export class RestaurantDetailsComponent implements OnInit {
   vote() {
     console.log("Vote for restaurant: id=" + this.restaurant.id);
   }
+
+  deleteRestaurant() {
+    this.restaurantService.deleteRestaurant(+this.restaurant.id);
+  }
 }
