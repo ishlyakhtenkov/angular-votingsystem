@@ -5,13 +5,12 @@ import { Dish } from 'src/app/common/dish';
 import { Menu } from 'src/app/common/menu';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
-import { RestaurantValidators } from 'src/app/validators/restaurant-validators';
 
 
-export function duplicateNameValidator(dishes: Dish[], isNew: boolean): ValidatorFn {
+export function duplicateNameValidator(dishes: Dish[], updatedDishName: string): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     let index = dishes.findIndex(tempDish => tempDish.name === control.value);
-    if (control.value !== undefined && (index != -1) && isNew) {
+    if (control.value !== undefined && (index != -1) && control.value !== updatedDishName) {
         return { 'duplicateName': true };
     }
     return null;
@@ -137,6 +136,7 @@ export class MenuTodayComponent implements OnInit {
         console.log("else : " + this.updatedDishName);
         this.deleteDish(this.updatedDishName);
         this.currentDishes.push(dish);
+        this.sortDishesArray(this.currentDishes);
       }
       document.getElementById("dish-modal-close").click();
     }
@@ -146,7 +146,7 @@ export class MenuTodayComponent implements OnInit {
     this.dishFormNew = theDishFormNew;
     this.dishFormGroup = this.formBuilder.group({
       dish: this.formBuilder.group({
-        name: new FormControl(dishName, [Validators.required, Validators.minLength(2), CustomValidators.notOnlyWhitespace, duplicateNameValidator(this.currentDishes, this.dishFormNew)]),
+        name: new FormControl(dishName, [Validators.required, Validators.minLength(2), CustomValidators.notOnlyWhitespace, duplicateNameValidator(this.currentDishes, this.updatedDishName)]),
         price: new FormControl(dishPrice, [Validators.required, CustomValidators.minOne])
       })
     });
