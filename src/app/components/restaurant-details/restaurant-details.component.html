@@ -11,6 +11,8 @@
     <div class="row align-items-center">
         <h1 class="col-md-3">{{ restaurant.name }}</h1>
         <div *ngIf="voteButtonStatus" class="col-md-5 text-right">
+            <button class="btn btn-warning mr-1">Update</button>
+            <button class="btn btn-danger mr-1">Delete</button>
             <button (click)="vote()" class="btn btn-primary">Want to lunch here!</button>
         </div>
     </div>
