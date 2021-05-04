@@ -50,7 +50,7 @@ export class MenuTodayComponent implements OnInit {
     this.currentDishes.push(dish);
     // this.isUpdated = true;
     // this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
-    this.restaurantService.showVoteButton(this.currentDishes.length > 0); //may be we should show button on real dishes (menu.dishes)
+    // this.restaurantService.showVoteButton(this.currentDishes.length > 0); //may be we should show button on real dishes (menu.dishes)
   }
 
   deleteDish(dishName: string) {
@@ -62,7 +62,7 @@ export class MenuTodayComponent implements OnInit {
     // this.isUpdated = true;
     this.currentDishes.splice(index, 1);
     // this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
-    this.restaurantService.showVoteButton(this.currentDishes.length > 0); //may be we should show button on real dishes (menu.dishes)
+    // this.restaurantService.showVoteButton(this.currentDishes.length > 0); //may be we should show button on real dishes (menu.dishes)
     // for (let dish of this.menu.dishes) {
     //   console.log("dish name " + dish.name);
     // }
