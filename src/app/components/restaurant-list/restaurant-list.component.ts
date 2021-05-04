@@ -16,6 +16,8 @@ export class RestaurantListComponent implements OnInit {
   constructor(private restaurantService: RestaurantService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.restaurantService.showAddRestaurantButton(true);
+
     this.route.paramMap.subscribe(
       () => {
         this.listRestaurants();

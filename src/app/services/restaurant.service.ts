@@ -13,6 +13,8 @@ export class RestaurantService {
 
   voteButtonStatus: Subject<boolean> = new Subject<boolean>();
 
+  addRestaurantButtonStatus: Subject<boolean> = new Subject<boolean>();
+
   constructor(private httpClient: HttpClient) { }
 
   getRestaurant(theRestaurantId: number): Observable<Restaurant> {
@@ -35,5 +37,9 @@ export class RestaurantService {
 
   showVoteButton(enabled: boolean) {
     this.voteButtonStatus.next(enabled);
+  }
+
+  showAddRestaurantButton(enabled: boolean) {
+    this.addRestaurantButtonStatus.next(enabled);
   }
 }

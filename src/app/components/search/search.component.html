@@ -5,6 +5,6 @@
         <button (click)="doSearch(myInput.value)" class="btn btn-outline-success my-2 my-sm-0">
             Search
         </button>
-        <a routerLink="/restaurant-form" class="btn btn-info ml-2">Add restaurant</a>
+        <a *ngIf="addRestaurantButtonStatus" routerLink="/restaurant-form" class="btn btn-info ml-2">Add restaurant</a>
     </div>
 </div>

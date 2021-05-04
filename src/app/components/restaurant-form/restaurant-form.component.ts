@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Restaurant } from 'src/app/common/restaurant';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 import { RestaurantValidators } from 'src/app/validators/restaurant-validators';
 
 @Component({
@@ -15,9 +16,11 @@ export class RestaurantFormComponent implements OnInit {
 
   restaurantFormGroup: FormGroup;
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) { }
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private restaurantService: RestaurantService) { }
 
   ngOnInit(): void {
+    this.restaurantService.showAddRestaurantButton(false);
+
     this.route.paramMap.subscribe(
       () => {
         this.handleRestaurantDetails();
