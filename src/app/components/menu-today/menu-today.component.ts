@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Dish } from 'src/app/common/dish';
 import { Menu } from 'src/app/common/menu';
 import { RestaurantService } from 'src/app/services/restaurant.service';
+import { CustomValidators } from 'src/app/validators/custom-validators';
+import { RestaurantValidators } from 'src/app/validators/restaurant-validators';
 
 @Component({
   selector: 'app-menu-today',
@@ -17,15 +20,26 @@ export class MenuTodayComponent implements OnInit {
 
   isUpdated: boolean = false;
 
+  dishFormGroup: FormGroup;
+
   @Input()
   restaurantId: string;
 
-  constructor(private restaurantService: RestaurantService, private router: Router) {
+  constructor(private restaurantService: RestaurantService, private router: Router, private formBuilder: FormBuilder) {
     
    }
 
   ngOnInit(): void {
     this.getTodayMenu();
+
+    this.makeDishForm();
+  }
+
+  get name() {
+    return this.dishFormGroup.get('dish.name');
+  }
+  get price() {
+    return this.dishFormGroup.get('dish.price');
   }
 
   getTodayMenu() {
@@ -82,5 +96,31 @@ export class MenuTodayComponent implements OnInit {
 
   isEqual(): boolean {
     return JSON.stringify(this.currentDishes) === JSON.stringify(this.menu.dishes);
+  }
+
+  onSubmit() {
+    if (this.dishFormGroup.invalid) {
+      this.dishFormGroup.markAllAsTouched();
+    } else {
+      console.log(`name: ${this.dishFormGroup.get('dish.name').value}, price: ${this.dishFormGroup.get('dish.price').value}`);
+      let dish: Dish = new Dish();
+      dish.name = this.dishFormGroup.get('dish.name').value;
+      dish.price = this.dishFormGroup.get('dish.price').value;
+      this.currentDishes.push(dish);
+      document.getElementById("dish-modal-close").click();
+    }
+  }
+
+  makeDishForm() {
+    this.dishFormGroup = this.formBuilder.group({
+      dish: this.formBuilder.group({
+        name: new FormControl('', [Validators.required, Validators.minLength(2), CustomValidators.notOnlyWhitespace]),
+        price: new FormControl(0, [Validators.required, CustomValidators.minOne])
+      })
+    });
+  }
+
+  cleanModal() {
+    this.dishFormGroup.reset();
   }
 }

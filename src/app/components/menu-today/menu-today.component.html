@@ -48,7 +48,9 @@
 
 <div class="row mt-4">
     <div class="col-md-12">
-        <button (click)="addDish()" class="btn btn-secondary">Add dish</button>
+        <!-- <button (click)="addDish()" class="btn btn-secondary">Add dish</button> -->
+        <button (click)="makeDishForm()" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addDishModal">Add
+            dish</button>
     </div>
 </div>
 
@@ -64,3 +66,54 @@
     </div>
 </div>
 
+<div class="modal draggable fade bd-example-modal-lg" id="addDishModal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center">New Dish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-left">
+                <div>
+                    <form [formGroup]="dishFormGroup" (ngSubmit)="onSubmit()">
+                        <div formGroupName="dish" class="text-left">
+
+                            <div class="form-group">
+                                <label for="name">Dish Name</label>
+                                <input formControlName="name" type="text" class="form-control" placeholder="Dish name">
+                                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="name.errors.required || name.errors.notOnlyWhitespace">
+                                        Dish Name is required
+                                    </div>
+                                    <div *ngIf="name.errors.minlength">
+                                        Dish Name must be at least 2 characters long
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Dish Price</label>
+                                <input formControlName="price" type="number" class="form-control" placeholder="Dish price">
+                                <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="price.errors.required">
+                                        Dish Price is required
+                                    </div>
+                                    <div *ngIf="price.errors.minOne">
+                                        Dish Price must be greater than 0
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn btn-info btn-block">Save</button>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="cleanModal()" type="button" class="btn btn-secondary" data-dismiss="modal" id="dish-modal-close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
