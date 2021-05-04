@@ -10,8 +10,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { SearchComponent } from './components/search/search.component';
 import { RestaurantDetailsComponent } from './components/restaurant-details/restaurant-details.component';
 import { MenuTodayComponent } from './components/menu-today/menu-today.component';
+import { RestaurantFormComponent } from './components/restaurant-form/restaurant-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
+  {path: 'restaurant-form', component: RestaurantFormComponent},
   {path: 'restaurants/:id', component: RestaurantDetailsComponent},
   {path: 'search/:keyword', component: RestaurantListComponent},
   {path: 'restaurants', component: RestaurantListComponent},
@@ -25,12 +28,14 @@ const routes: Routes = [
     RestaurantListComponent,
     SearchComponent,
     RestaurantDetailsComponent,
-    MenuTodayComponent
+    MenuTodayComponent,
+    RestaurantFormComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [RestaurantService],
   bootstrap: [AppComponent]
