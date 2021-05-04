@@ -1,11 +1,22 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Dish } from 'src/app/common/dish';
 import { Menu } from 'src/app/common/menu';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 import { RestaurantValidators } from 'src/app/validators/restaurant-validators';
+
+
+export function duplicateNameValidator(dishes: Dish[], isNew: boolean): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    let index = dishes.findIndex(tempDish => tempDish.name === control.value);
+    if (control.value !== undefined && (index != -1) && isNew) {
+        return { 'duplicateName': true };
+    }
+    return null;
+};
+}
 
 @Component({
   selector: 'app-menu-today',
@@ -22,6 +33,10 @@ export class MenuTodayComponent implements OnInit {
 
   dishFormGroup: FormGroup;
 
+  dishFormNew: boolean = true;
+
+  updatedDishName: string;
+
   @Input()
   restaurantId: string;
 
@@ -32,7 +47,7 @@ export class MenuTodayComponent implements OnInit {
   ngOnInit(): void {
     this.getTodayMenu();
 
-    this.makeDishForm();
+    this.makeDishForm('', 0, true);
   }
 
   get name() {
@@ -46,6 +61,7 @@ export class MenuTodayComponent implements OnInit {
     this.restaurantService.getMenuToday(+this.restaurantId).subscribe(
       data => {
         this.menu = data;
+        this.sortDishesArray(this.menu.dishes);
         this.currentDishes = Array.from(this.menu.dishes);
         this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
       }
@@ -71,15 +87,22 @@ export class MenuTodayComponent implements OnInit {
     console.log("delete dish with name: " + dishName);
     // let index = this.menu.dishes.findIndex(tempDish => tempDish.name === dishName);
     let index = this.currentDishes.findIndex(tempDish => tempDish.name === dishName);
-    console.log("delete dish with index: " + index);
     // this.menu.dishes.splice(index, 1);
     // this.isUpdated = true;
-    this.currentDishes.splice(index, 1);
+    if (index != -1) {
+      console.log("delete dish with index: " + index);
+      this.currentDishes.splice(index, 1);
+    }
     // this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
     // this.restaurantService.showVoteButton(this.currentDishes.length > 0); //may be we should show button on real dishes (menu.dishes)
     // for (let dish of this.menu.dishes) {
     //   console.log("dish name " + dish.name);
     // }
+  }
+
+  updateDish(dishName: string, dishPrice: number) {
+    this.updatedDishName = dishName;
+    this.makeDishForm(dishName, dishPrice, false);
   }
 
   publish() {
@@ -103,24 +126,39 @@ export class MenuTodayComponent implements OnInit {
       this.dishFormGroup.markAllAsTouched();
     } else {
       console.log(`name: ${this.dishFormGroup.get('dish.name').value}, price: ${this.dishFormGroup.get('dish.price').value}`);
+      console.log(this.dishFormNew);
       let dish: Dish = new Dish();
       dish.name = this.dishFormGroup.get('dish.name').value;
       dish.price = this.dishFormGroup.get('dish.price').value;
-      this.currentDishes.push(dish);
+      if (this.dishFormNew) {
+        this.currentDishes.push(dish);
+        this.sortDishesArray(this.currentDishes);
+      } else {
+        console.log("else : " + this.updatedDishName);
+        this.deleteDish(this.updatedDishName);
+        this.currentDishes.push(dish);
+      }
       document.getElementById("dish-modal-close").click();
     }
   }
 
-  makeDishForm() {
+  makeDishForm(dishName: string, dishPrice: number, theDishFormNew: boolean) {
+    this.dishFormNew = theDishFormNew;
     this.dishFormGroup = this.formBuilder.group({
       dish: this.formBuilder.group({
-        name: new FormControl('', [Validators.required, Validators.minLength(2), CustomValidators.notOnlyWhitespace]),
-        price: new FormControl(0, [Validators.required, CustomValidators.minOne])
+        name: new FormControl(dishName, [Validators.required, Validators.minLength(2), CustomValidators.notOnlyWhitespace, duplicateNameValidator(this.currentDishes, this.dishFormNew)]),
+        price: new FormControl(dishPrice, [Validators.required, CustomValidators.minOne])
       })
     });
   }
 
   cleanModal() {
+    this.dishFormNew = true;
     this.dishFormGroup.reset();
+  }
+
+  sortDishesArray(dishes: Dish[]) {
+    console.log("sort array");
+    dishes.sort( (dish1, dish2) => dish1.name.localeCompare(dish2.name) );
   }
 }

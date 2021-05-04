@@ -11,19 +11,41 @@
 
 <div *ngIf="currentDishes?.length > 0" class="container">
     <!-- <h3 class="mb-4">Today's Lunch Menu</h3> -->
-    <div *ngFor="let tempDish of currentDishes">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    
+        <tbody>
+            <tr *ngFor="let tempDish of currentDishes">
+                <td class="align-middle text-break">{{ tempDish.name }}</td>
+                <td class="align-middle">{{ tempDish.price }}</td>
+                <td>
+                    <button (click)="updateDish(tempDish.name, tempDish.price)" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addDishModal"><i class="fa fa-pen" aria-hidden="true"></i></button>            
+                    <button (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm ml-1"><i class="fa fa-minus" aria-hidden="true"></i></button>     
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- <div *ngFor="let tempDish of currentDishes">
         <div class="row">
             <div class="col-md-5">
-                <h4 class="text-left">{{ tempDish.name }}</h4>
+                <h4 class="text-left text-break">{{ tempDish.name }}</h4>
             </div>
             <div class="col-md-5">
                 <h4 class="text-right">{{ tempDish.price }} rub.</h4>
             </div>
             <div class="col-md-2">
-                <button (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm">X</button>
+                <button (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                <button (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm"><i class="fa fa-minus" aria-hidden="true"></i></button>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <!-- <div *ngIf="newDishes?.length > 0" class="container">
@@ -49,7 +71,7 @@
 <div class="row mt-4">
     <div class="col-md-12">
         <!-- <button (click)="addDish()" class="btn btn-secondary">Add dish</button> -->
-        <button (click)="makeDishForm()" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addDishModal">Add
+        <button (click)="makeDishForm('', 0, true)" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addDishModal">Add
             dish</button>
     </div>
 </div>
@@ -90,6 +112,9 @@
                                     </div>
                                     <div *ngIf="name.errors.minlength">
                                         Dish Name must be at least 2 characters long
+                                    </div>
+                                    <div *ngIf="name.errors.duplicateName">
+                                        Dish with this name already exists
                                     </div>
                                 </div>
                             </div>
