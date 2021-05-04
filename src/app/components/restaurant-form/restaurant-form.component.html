@@ -5,7 +5,7 @@
         <div formGroupName="restaurant" class="text-center mt-4">
 
             <div class="form-group row">
-                <label for="inputName" class="col-sm-2 col-form-label">Restaurant Name</label>
+                <label for="inputName" class="col-sm-2 col-form-label text-left">Restaurant Name</label>
                 <div class="col-sm-10">
                     <input formControlName="name" type="text" class="form-control" id="inputName" placeholder="Restaurant name">
                     <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger mt-1">
@@ -20,7 +20,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="inputAddress" class="col-sm-2 col-form-label">Restaurant Address</label>
+                <label for="inputAddress" class="col-sm-2 col-form-label text-left">Restaurant Address</label>
                 <div class="col-sm-10">
                     <input formControlName="address" type="text" class="form-control" id="inputAddress" placeholder="Restaurant address">
                     <div *ngIf="address.invalid && (address.dirty || address.touched)" class="alert alert-danger mt-1">

@@ -11,11 +11,13 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 export class RestaurantListComponent implements OnInit {
 
   restaurants: Restaurant[];
+
   searchMode: boolean;
 
   constructor(private restaurantService: RestaurantService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // show 'Add Restaurant' button in Search component here
     this.restaurantService.showAddRestaurantButton(true);
 
     this.route.paramMap.subscribe(
@@ -26,6 +28,7 @@ export class RestaurantListComponent implements OnInit {
   }
 
   listRestaurants() {
+    // check if search by keyword is active
     this.searchMode = this.route.snapshot.paramMap.has('keyword');
 
     if (this.searchMode) {

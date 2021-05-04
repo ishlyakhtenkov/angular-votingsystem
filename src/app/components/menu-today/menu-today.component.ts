@@ -6,15 +6,15 @@ import { Menu } from 'src/app/common/menu';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
-
-export function duplicateNameValidator(dishes: Dish[], updatedDishName: string): ValidatorFn {
+// Custom Duplicate Dish Name Validator
+export function duplicateDishNameValidator(dishes: Dish[], updatedDishOldName: string): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     let index = dishes.findIndex(tempDish => tempDish.name === control.value);
-    if (control.value !== undefined && (index != -1) && control.value !== updatedDishName) {
-        return { 'duplicateName': true };
+    if (control.value !== undefined && (index != -1) && control.value !== updatedDishOldName) {
+      return { 'duplicateName': true };
     }
     return null;
-};
+  };
 }
 
 @Component({
@@ -24,17 +24,18 @@ export function duplicateNameValidator(dishes: Dish[], updatedDishName: string):
 })
 export class MenuTodayComponent implements OnInit {
 
+  // Menu from BackEnd
   menu: Menu = new Menu();
 
   currentDishes: Dish[] = [];
 
-  isUpdated: boolean = false;
-
   dishFormGroup: FormGroup;
 
-  dishFormNew: boolean = true;
+  // This value defines wich dish (new or existed) comes from modal form (it needs to know add or update dish in currentDishes array)
+  isDishNew: boolean = true;
 
-  updatedDishName: string;
+  // This value stores old name of updated dish that comes from modal form (it needs for duplicate dish name validator, and for update dish in currentDishes array)
+  updatedDishOldName: string;
 
   @Input()
   restaurantId: string;
@@ -46,14 +47,7 @@ export class MenuTodayComponent implements OnInit {
   ngOnInit(): void {
     this.getTodayMenu();
 
-    this.makeDishForm('', 0, true);
-  }
-
-  get name() {
-    return this.dishFormGroup.get('dish.name');
-  }
-  get price() {
-    return this.dishFormGroup.get('dish.price');
+    this.makeDishFormGroup('', 0, true);
   }
 
   getTodayMenu() {
@@ -62,50 +56,31 @@ export class MenuTodayComponent implements OnInit {
         this.menu = data;
         this.sortDishesArray(this.menu.dishes);
         this.currentDishes = Array.from(this.menu.dishes);
+
+        // Tell restaurant service show/not show 'Vote button'
         this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
       }
     );
   }
 
-  vote() {
-    console.log("Vote for restaurant: id=" + this.restaurantId);
+  // Getters for Dish FormGroup values
+  get name() {
+    return this.dishFormGroup.get('dish.name');
   }
-
-  addDish() {
-    let dish: Dish = new Dish();
-    dish.name = "sapogi";
-    dish.price = 200;
-    // this.menu.dishes.push(dish);
-    this.currentDishes.push(dish);
-    // this.isUpdated = true;
-    // this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
-    // this.restaurantService.showVoteButton(this.currentDishes.length > 0); //may be we should show button on real dishes (menu.dishes)
+  get price() {
+    return this.dishFormGroup.get('dish.price');
   }
 
   deleteDish(dishName: string) {
-    console.log("delete dish with name: " + dishName);
-    // let index = this.menu.dishes.findIndex(tempDish => tempDish.name === dishName);
+    console.log("Delete dish with name: " + dishName);
     let index = this.currentDishes.findIndex(tempDish => tempDish.name === dishName);
-    // this.menu.dishes.splice(index, 1);
-    // this.isUpdated = true;
     if (index != -1) {
-      console.log("delete dish with index: " + index);
       this.currentDishes.splice(index, 1);
     }
-    // this.restaurantService.showVoteButton(this.menu.dishes.length > 0);
-    // this.restaurantService.showVoteButton(this.currentDishes.length > 0); //may be we should show button on real dishes (menu.dishes)
-    // for (let dish of this.menu.dishes) {
-    //   console.log("dish name " + dish.name);
-    // }
   }
 
-  updateDish(dishName: string, dishPrice: number) {
-    this.updatedDishName = dishName;
-    this.makeDishForm(dishName, dishPrice, false);
-  }
-
-  publish() {
-        // TODO pass currentDishes to backend
+  publishMenuTo() {
+    // TODO pass currentDishes to backend
     if (this.menu.dishes.length == 0) {
       console.log("MenuTo POST for restaurant: " + this.restaurantId);
     } else if (this.currentDishes.length == 0) {
@@ -116,49 +91,50 @@ export class MenuTodayComponent implements OnInit {
     window.location.reload();
   }
 
-  isEqual(): boolean {
-    return JSON.stringify(this.currentDishes) === JSON.stringify(this.menu.dishes);
+  makeDishFormGroupForUpdate(dishName: string, dishPrice: number) {
+    this.updatedDishOldName = dishName;
+    this.makeDishFormGroup(dishName, dishPrice, false);
+  }
+
+  // Prepare Dish Form Group
+  makeDishFormGroup(dishName: string, dishPrice: number, isDishNew: boolean) {
+    this.isDishNew = isDishNew;
+    this.dishFormGroup = this.formBuilder.group({
+      dish: this.formBuilder.group({
+        name: new FormControl(dishName, [Validators.required, Validators.minLength(2), CustomValidators.notOnlyWhitespace, duplicateDishNameValidator(this.currentDishes, this.updatedDishOldName)]),
+        price: new FormControl(dishPrice, [Validators.required, CustomValidators.minOne])
+      })
+    });
   }
 
   onSubmit() {
     if (this.dishFormGroup.invalid) {
       this.dishFormGroup.markAllAsTouched();
     } else {
-      console.log(`name: ${this.dishFormGroup.get('dish.name').value}, price: ${this.dishFormGroup.get('dish.price').value}`);
-      console.log(this.dishFormNew);
       let dish: Dish = new Dish();
       dish.name = this.dishFormGroup.get('dish.name').value;
       dish.price = this.dishFormGroup.get('dish.price').value;
-      if (this.dishFormNew) {
+      if (this.isDishNew) {
         this.currentDishes.push(dish);
         this.sortDishesArray(this.currentDishes);
       } else {
-        console.log("else : " + this.updatedDishName);
-        this.deleteDish(this.updatedDishName);
+        this.deleteDish(this.updatedDishOldName);
+        this.updatedDishOldName = null;
         this.currentDishes.push(dish);
         this.sortDishesArray(this.currentDishes);
       }
+
+      // Close Modal Dish Form after pushing 'Save' button
       document.getElementById("dish-modal-close").click();
     }
   }
 
-  makeDishForm(dishName: string, dishPrice: number, theDishFormNew: boolean) {
-    this.dishFormNew = theDishFormNew;
-    this.dishFormGroup = this.formBuilder.group({
-      dish: this.formBuilder.group({
-        name: new FormControl(dishName, [Validators.required, Validators.minLength(2), CustomValidators.notOnlyWhitespace, duplicateNameValidator(this.currentDishes, this.updatedDishName)]),
-        price: new FormControl(dishPrice, [Validators.required, CustomValidators.minOne])
-      })
-    });
-  }
-
-  cleanModal() {
-    this.dishFormNew = true;
-    this.dishFormGroup.reset();
-  }
-
   sortDishesArray(dishes: Dish[]) {
-    console.log("sort array");
-    dishes.sort( (dish1, dish2) => dish1.name.localeCompare(dish2.name) );
+    dishes.sort((dish1, dish2) => dish1.name.localeCompare(dish2.name));
+  }
+
+  // Check menu.dishes and currentDishes for equality
+  isDishArraysEqual(): boolean {
+    return JSON.stringify(this.currentDishes) === JSON.stringify(this.menu.dishes);
   }
 }

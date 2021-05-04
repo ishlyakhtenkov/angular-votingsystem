@@ -5,16 +5,24 @@
 
             <div class="row align-items-center">
                 <h1 class="col-md-6">{{ restaurant.name }}</h1>
+
                 <div class="col-md-6 text-right">
-                    <a [routerLink]="['/restaurant-form']" 
-                                        [queryParams]="{id: restaurant.id, name: restaurant.name, address: restaurant.address}" class="btn btn-warning mr-1"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
-                    <!-- <button class="btn btn-warning mr-1">Update</button> -->
-                    <button (click)="deleteRestaurant()" class="btn btn-danger"><i class="fa fa-trash-alt" aria-hidden="true"></i></button>
+
+                    <a [routerLink]="['/restaurant-form']"
+                        [queryParams]="{id: restaurant.id, name: restaurant.name, address: restaurant.address}"
+                        class="btn btn-warning mr-1"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
+
+                    <button (click)="deleteRestaurant()" class="btn btn-danger"><i class="fa fa-trash-alt"
+                            aria-hidden="true"></i></button>
+                     
+                            <!-- Show 'Vote' button based on voteButtonStatus value-->
                     <span *ngIf="voteButtonStatus">
-                        <button (click)="vote()" class="btn btn-primary ml-1"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+                        <button (click)="voteForRestaurant()" class="btn btn-primary ml-1"><i class="fa fa-thumbs-up"
+                                aria-hidden="true"></i></button>
                     </span>
                 </div>
             </div>
+
             <div class="row mb-2">
                 <h3 class="col-md-6">{{ restaurant.address }}</h3>
             </div>
@@ -24,19 +32,4 @@
             <app-menu-today [restaurantId]="restaurant.id"></app-menu-today>
         </div>
     </div>
-    <!-- <div class="row align-items-center">
-        <h1 class="col-md-3">{{ restaurant.name }}</h1>
-        <div class="col-md-3 text-right">
-            <a [routerLink]="['/restaurant-form']" 
-                                [queryParams]="{id: restaurant.id, name: restaurant.name, address: restaurant.address}" class="btn btn-warning mr-1"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
-            <button class="btn btn-warning mr-1">Update</button>
-            <button (click)="deleteRestaurant()" class="btn btn-danger"><i class="fa fa-trash-alt" aria-hidden="true"></i></button>
-            <span *ngIf="voteButtonStatus">
-                <button (click)="vote()" class="btn btn-primary ml-1"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
-            </span>
-        </div>
-    </div>
-    <div class="row mb-2">
-        <h3 class="col-md-6">{{ restaurant.address }}</h3>
-    </div> -->
 </div>

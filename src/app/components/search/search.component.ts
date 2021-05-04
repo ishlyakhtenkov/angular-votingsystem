@@ -9,6 +9,7 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 })
 export class SearchComponent implements OnInit {
 
+  // This value defines show/not show 'Add restaurant' button on search component
   addRestaurantButtonStatus: boolean = true;
 
   constructor(private router: Router, private restaurantService: RestaurantService) { }
@@ -17,6 +18,7 @@ export class SearchComponent implements OnInit {
     this.updateAddRestaurantButtonStatus();
   }
 
+  // subscribe for addRestaurantButtonStatus from restaurant service
   updateAddRestaurantButtonStatus() {
     this.restaurantService.addRestaurantButtonStatus.subscribe(
       data => this.addRestaurantButtonStatus = data

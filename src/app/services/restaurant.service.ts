@@ -35,15 +35,17 @@ export class RestaurantService {
     return this.httpClient.get<Restaurant[]>(`${this.baseUrl}/by?name=${theKeyword}`);
   }
 
+  deleteRestaurant(theRestaurantId: number) {
+    console.log(`Delete restaurant with id = ${theRestaurantId}`);
+  }
+
+  // tell subscribers show/not show 'Vote' button
   showVoteButton(enabled: boolean) {
     this.voteButtonStatus.next(enabled);
   }
 
+  // tell subscribers show/not show 'Add Restaurant' button
   showAddRestaurantButton(enabled: boolean) {
     this.addRestaurantButtonStatus.next(enabled);
-  }
-
-  deleteRestaurant(theRestaurantId: number) {
-    console.log(`Delete restaurant with id = ${theRestaurantId}`);
   }
 }
