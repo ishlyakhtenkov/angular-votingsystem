@@ -19,9 +19,6 @@ export class RestaurantFormComponent implements OnInit {
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private restaurantService: RestaurantService) { }
 
   ngOnInit(): void {
-    // Do not show 'Add restaurant' button in Search component here
-    this.restaurantService.showAddRestaurantButton(false);
-
     this.route.paramMap.subscribe(
       () => {
         this.handleRestaurantDetails();

@@ -18,9 +18,6 @@ export class RestaurantDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private restaurantService: RestaurantService) { }
 
   ngOnInit(): void {
-    // show 'Add Restaurant' button in Search component here
-    this.restaurantService.showAddRestaurantButton(true);
-
     this.route.paramMap.subscribe(
       () => {
         this.handleRestaurantDetails();

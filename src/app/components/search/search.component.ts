@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 
 @Component({
@@ -9,20 +9,21 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 })
 export class SearchComponent implements OnInit {
 
-  // This value defines show/not show 'Add restaurant' button on search component
-  addRestaurantButtonStatus: boolean = true;
+  showAddRestaurantButton: boolean = true;
 
-  constructor(private router: Router, private restaurantService: RestaurantService) { }
+  constructor(private router: Router, private restaurantService: RestaurantService) { 
+    router.events.forEach((event) => {
+      if (event instanceof NavigationStart) {
+        if (event['url'].includes('/restaurant-form')) {
+          this.showAddRestaurantButton = false;
+        } else {
+          this.showAddRestaurantButton = true;
+        }
+      }
+    });
+   }
 
   ngOnInit(): void {
-    this.updateAddRestaurantButtonStatus();
-  }
-
-  // subscribe for addRestaurantButtonStatus from restaurant service
-  updateAddRestaurantButtonStatus() {
-    this.restaurantService.addRestaurantButtonStatus.subscribe(
-      data => this.addRestaurantButtonStatus = data
-    );
   }
 
   doSearch(value: string) {

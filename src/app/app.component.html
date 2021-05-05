@@ -1,20 +1,9 @@
-<div class="navbar navbar-dark bg-dark box-shadow">
-    <div class="container">
-        <a href="#" class="navbar-brand">
-            <img src="assets/images/votingsystem.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            <strong>Voting System</strong>
-        </a>
-        <a class="btn btn-sm btn-outline-secondary" href="#">Profile</a>
-    </div>
-</div>
+<app-header *ngIf="showHeader"></app-header>
 
-<app-search></app-search>
+<app-search *ngIf="showSearch"></app-search>
 
 <router-outlet></router-outlet>
 
-<footer class="bg-light text-center text-lg-start">
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      © 2021 Copyright:
-      <a class="text-dark" href="https://www.igar15.ru/">Shlyakhtenkov Projects</a>
-    </div>
-</footer>
+<app-footer></app-footer>
+
+<notifier-container></notifier-container>
