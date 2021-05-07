@@ -35,6 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         (response: User) => {
           this.showLoading = false;
           this.sendNotification(NotificationType.SUCCESS, `A new account was created for ${response.email}`);
+          this.router.navigateByUrl("/login");
         },
         (errorResponse: HttpErrorResponse) => {
           this.sendNotification(NotificationType.ERROR, errorResponse.error.details);
