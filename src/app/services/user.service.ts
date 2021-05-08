@@ -17,13 +17,11 @@ export class UserService {
     return this.httpClient.get<User>(this.profileUrl); 
   }
 
-  // may be i need to add observable here like in video
-  updateUser(userTo: UserTo) {
-    this.httpClient.put(this.profileUrl, userTo);
+  updateUser(userTo: UserTo): Observable<any> {
+    return this.httpClient.put<any>(this.profileUrl, userTo);
   }
 
-  // may be i need to add observable here like in video
-  deleteUser() {
-    this.httpClient.delete(this.profileUrl);
+  deleteUser(): Observable<any> {
+    return this.httpClient.delete<any>(this.profileUrl);
   }
 }
