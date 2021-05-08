@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  onUpdateCurrentUser(theUserTo: UserTo) {
+  updateProfile(theUserTo: UserTo): void {
     let userTo = new UserTo(this.user.id, theUserTo.name, theUserTo.email, theUserTo.password);
     this.userService.updateUser(userTo).subscribe(
       response => {
@@ -43,7 +43,12 @@ export class ProfileComponent implements OnInit {
     )
   }
 
-  deleteProfile() {
+  logOut(): void {
+    this.authenticationService.logOut();
+    this.router.navigateByUrl("/restaurants");
+  }
+
+  deleteProfile(): void {
     this.userService.deleteUser().subscribe(
       response => {
         this.notificationService.sendNotification(NotificationType.SUCCESS, `The profile was deleted`);

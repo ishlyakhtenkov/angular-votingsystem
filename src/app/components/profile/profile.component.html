@@ -29,7 +29,7 @@
                                     <div class="tab-content pt-3">
                                         <div class="tab-pane active">
                                             <form #profileUserForm="ngForm"
-                                                (ngSubmit)="onUpdateCurrentUser(profileUserForm.value)" class="form"
+                                                (ngSubmit)="updateProfile(profileUserForm.value)" class="form"
                                                 novalidate>
                                                 <div class="row">
                                                     <div class="col">
@@ -102,7 +102,7 @@
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="px-xl-3">
-                                    <button  class="btn btn-block btn-secondary">
+                                    <button (click)="logOut()" class="btn btn-block btn-secondary">
                                         <span>Logout</span>
                                         <i class="fas fa-sign-in-alt ml-1"></i>
                                     </button>
