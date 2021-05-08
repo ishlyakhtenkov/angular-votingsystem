@@ -15,11 +15,12 @@ import { CustomValidators } from 'src/app/validators/custom-validators';
 })
 export class RestaurantFormComponent implements OnInit {
 
-  restaurant: Restaurant = new Restaurant('', '', '', '');
+  restaurant: Restaurant;
 
   restaurantFormGroup: FormGroup;
 
-  constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder, private restaurantService: RestaurantService, private notificationService: NotificationService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder, 
+              private restaurantService: RestaurantService, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(
@@ -37,14 +38,9 @@ export class RestaurantFormComponent implements OnInit {
   }
 
   handleRestaurantDetails() {
-    this.restaurant.id = this.route.snapshot.queryParamMap.get('id');
-    this.restaurant.name = this.route.snapshot.queryParamMap.get('name');
-    this.restaurant.address = this.route.snapshot.queryParamMap.get('address');
-    if (this.route.snapshot.queryParamMap.has('imageUrl')) {
-      this.restaurant.imageUrl = this.route.snapshot.queryParamMap.get('imageUrl');
-    } else {
-      this.restaurant.imageUrl = 'assets/images/default-restaurant-image.jpg';
-    }
+    let imageUrl = this.route.snapshot.queryParamMap.has('imageUrl') ? this.route.snapshot.queryParamMap.get('imageUrl') : 'assets/images/default-restaurant-image.jpg';
+    this.restaurant = new Restaurant(this.route.snapshot.queryParamMap.get('id'), this.route.snapshot.queryParamMap.get('name'), 
+                                     this.route.snapshot.queryParamMap.get('address'), imageUrl);
   }
 
   // getters for FormGroup values
@@ -59,25 +55,25 @@ export class RestaurantFormComponent implements OnInit {
     if (this.restaurantFormGroup.invalid) {
       this.restaurantFormGroup.markAllAsTouched();
     } else {
-      let theRestaurant = new Restaurant(this.restaurant.id, this.restaurantFormGroup.get('restaurant.name').value, this.restaurantFormGroup.get('restaurant.address').value, this.restaurant.imageUrl);
-      console.log(`id: ${this.restaurant.id}, name: ${this.restaurantFormGroup.get('restaurant.name').value}, address: ${this.restaurantFormGroup.get('restaurant.address').value}`)
+      let theRestaurant = new Restaurant(this.restaurant.id, this.restaurantFormGroup.get('restaurant.name').value, 
+                                         this.restaurantFormGroup.get('restaurant.address').value, this.restaurant.imageUrl);
       if (this.restaurant.id == null) {
-        console.log("Create new restaurant POST");
         this.restaurantService.createRestaurant(theRestaurant).subscribe(
           (response: Restaurant) => {
             this.notificationService.sendNotification(NotificationType.SUCCESS, `A new restaurant ${response.name} was created`);
-            this.router.navigate([`/restaurants/${response.id}`], {queryParams: {id: response.id, name: response.name, address: response.address, imageUrl: response.imageUrl}});
+            this.router.navigate([`/restaurants/${response.id}`], 
+                                  {queryParams: {id: response.id, name: response.name, address: response.address, imageUrl: response.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
             this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
           }
         );
       } else {
-        console.log("Update the restaurant PUT");
         this.restaurantService.updateRestaurant(theRestaurant).subscribe(
           response => {
             this.notificationService.sendNotification(NotificationType.SUCCESS, `The restaurant was updated`);
-            this.router.navigate([`/restaurants/${theRestaurant.id}`], {queryParams: {id: theRestaurant.id, name: theRestaurant.name, address: theRestaurant.address, imageUrl: theRestaurant.imageUrl}});
+            this.router.navigate([`/restaurants/${theRestaurant.id}`], 
+                                  {queryParams: {id: theRestaurant.id, name: theRestaurant.name, address: theRestaurant.address, imageUrl: theRestaurant.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
             this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);

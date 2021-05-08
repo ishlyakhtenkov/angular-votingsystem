@@ -13,12 +13,13 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 })
 export class RestaurantDetailsComponent implements OnInit {
 
-  restaurant: Restaurant = new Restaurant('', '', '', '');
+  restaurant: Restaurant;
 
   // This value defines show/not show 'Vote' button on restaurant details component
   voteButtonStatus: boolean = false;
 
-  constructor(private router: Router, private route: ActivatedRoute, private restaurantService: RestaurantService, private notificationService: NotificationService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private restaurantService: RestaurantService, 
+              private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(
@@ -31,10 +32,8 @@ export class RestaurantDetailsComponent implements OnInit {
   }
 
   handleRestaurantDetails() {
-    this.restaurant.id = this.route.snapshot.queryParamMap.get('id');
-    this.restaurant.name = this.route.snapshot.queryParamMap.get('name');
-    this.restaurant.address = this.route.snapshot.queryParamMap.get('address');
-    this.restaurant.imageUrl = this.route.snapshot.queryParamMap.get('imageUrl');
+    this.restaurant = new Restaurant(this.route.snapshot.queryParamMap.get('id'), this.route.snapshot.queryParamMap.get('name'), 
+                                     this.route.snapshot.queryParamMap.get('address'), this.route.snapshot.queryParamMap.get('imageUrl'));
   }
 
   // subscribe for voteButtonStatus from restaurant service
