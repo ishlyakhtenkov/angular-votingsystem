@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit {
 
   logOut(): void {
     this.authenticationService.logOut();
+    this.notificationService.sendNotification(NotificationType.SUCCESS, 'You have been logged out');
     this.router.navigateByUrl("/restaurants");
   }
 
