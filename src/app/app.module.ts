@@ -24,6 +24,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProfileComponent } from './components/profile/profile.component';
+import { MenuService } from './services/menu.service';
 
 const routes: Routes = [
   {path: 'profile', component: ProfileComponent},
@@ -60,7 +61,8 @@ const routes: Routes = [
     NgbModule,
     FormsModule
   ],
-  providers: [RestaurantService, AuthenticationService, UserService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}, AuthenticationGuard, NotificationService],
+  providers: [RestaurantService, AuthenticationService, UserService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}, 
+    AuthenticationGuard, NotificationService, MenuService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

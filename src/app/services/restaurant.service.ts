@@ -1,7 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { Menu } from '../common/menu';
 import { Restaurant } from '../common/restaurant';
 
 @Injectable({
@@ -20,11 +19,6 @@ export class RestaurantService {
     return this.httpClient.get<Restaurant>(restaurantUrl);
   }
 
-  getMenuToday(theRestaurantId: number): Observable<Menu> {
-    const menuTodayUrl = `${this.baseUrl}/${theRestaurantId}/menus/today`;
-    return this.httpClient.get<Menu>(menuTodayUrl);
-  }
-
   getRestaurantList(): Observable<Restaurant[]> {
     return this.httpClient.get<Restaurant[]>(this.baseUrl);
   }
@@ -33,8 +27,18 @@ export class RestaurantService {
     return this.httpClient.get<Restaurant[]>(`${this.baseUrl}/by?name=${theKeyword}`);
   }
 
-  deleteRestaurant(theRestaurantId: number) {
-    console.log(`Delete restaurant with id = ${theRestaurantId}`);
+  createRestaurant(restaurant: Restaurant): Observable<Restaurant> {
+    return this.httpClient.post<Restaurant>(this.baseUrl, restaurant);
+  }
+
+  deleteRestaurant(theRestaurantId: number): Observable<any> {
+    return this.httpClient.delete<any>(`${this.baseUrl}/${theRestaurantId}`);
+  }
+
+  updateRestaurant(restaurant: Restaurant): Observable<any> {
+    console.log(restaurant);
+    console.log(`${this.baseUrl}/${restaurant.id}`);
+    return this.httpClient.put<any>(`${this.baseUrl}/${restaurant.id}`, restaurant);
   }
 
   // tell subscribers show/not show 'Vote' button

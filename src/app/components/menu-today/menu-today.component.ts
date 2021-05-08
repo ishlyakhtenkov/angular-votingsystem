@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Vali
 import { Router } from '@angular/router';
 import { Dish } from 'src/app/common/dish';
 import { Menu } from 'src/app/common/menu';
+import { MenuService } from 'src/app/services/menu.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
@@ -40,7 +41,7 @@ export class MenuTodayComponent implements OnInit {
   @Input()
   restaurantId: string;
 
-  constructor(private restaurantService: RestaurantService, private router: Router, private formBuilder: FormBuilder) {
+  constructor(private restaurantService: RestaurantService, private menuService: MenuService, private router: Router, private formBuilder: FormBuilder) {
     
    }
 
@@ -51,7 +52,7 @@ export class MenuTodayComponent implements OnInit {
   }
 
   getTodayMenu() {
-    this.restaurantService.getMenuToday(+this.restaurantId).subscribe(
+    this.menuService.getMenuToday(+this.restaurantId).subscribe(
       data => {
         this.menu = data;
         this.sortDishesArray(this.menu.dishes);

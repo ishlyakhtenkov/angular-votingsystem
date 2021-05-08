@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Restaurant } from 'src/app/common/restaurant';
+import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationService } from 'src/app/services/notification.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 
 @Component({
@@ -10,12 +13,12 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 })
 export class RestaurantDetailsComponent implements OnInit {
 
-  restaurant: Restaurant = new Restaurant();
+  restaurant: Restaurant = new Restaurant('', '', '', '');
 
   // This value defines show/not show 'Vote' button on restaurant details component
   voteButtonStatus: boolean = false;
 
-  constructor(private route: ActivatedRoute, private restaurantService: RestaurantService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private restaurantService: RestaurantService, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(
@@ -46,6 +49,22 @@ export class RestaurantDetailsComponent implements OnInit {
   }
 
   deleteRestaurant() {
-    this.restaurantService.deleteRestaurant(+this.restaurant.id);
+    this.restaurantService.deleteRestaurant(+this.restaurant.id).subscribe(
+      response => {
+        this.sendNotification(NotificationType.SUCCESS, `The restaurant was deleted`);
+        this.router.navigateByUrl("/restaurants");
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+      }
+    );
+  }
+
+  private sendNotification(notificationType: NotificationType, message: string) {
+    if (message) {
+      this.notificationService.notify(notificationType, message);
+    } else {
+      this.notificationService.notify(notificationType, 'An error occured. Please try again');
+    }
   }
 }
