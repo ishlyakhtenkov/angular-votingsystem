@@ -91,10 +91,7 @@ export class MenuTodayComponent implements OnInit {
       this.menuService.createMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
         (response: Menu) => {
           this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was created`);
-          this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
-            this.router.navigate([`/restaurants/${this.restaurantId}`], 
-            {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
-          });
+          this.reloadRestaurantComponent();
         },
         (errorResponse: HttpErrorResponse) => {
           this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
@@ -107,10 +104,7 @@ export class MenuTodayComponent implements OnInit {
       this.menuService.updateMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
         response => {
           this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was updated`);
-          this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
-            this.router.navigate([`/restaurants/${this.restaurantId}`], 
-            {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
-          });
+          this.reloadRestaurantComponent();
         },
         (errorResponse: HttpErrorResponse) => {
           this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
@@ -123,11 +117,7 @@ export class MenuTodayComponent implements OnInit {
       this.menuService.deleteMenuToday(+this.restaurantId).subscribe(
         response => {
           this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was deleted`);
-          this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
-            this.router.navigate([`/restaurants/${this.restaurantId}`], 
-            {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
-          });
-          
+          this.reloadRestaurantComponent();          
         },
         (errorResponse: HttpErrorResponse) => {
           this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
@@ -192,6 +182,13 @@ export class MenuTodayComponent implements OnInit {
 
   private sortDishesArray(dishes: Dish[]) {
     dishes.sort((dish1, dish2) => dish1.name.localeCompare(dish2.name));
+  }
+
+  private reloadRestaurantComponent() {
+    this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
+      this.router.navigate([`/restaurants/${this.restaurantId}`], 
+      {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
+    });
   }
 
   // Check menu.dishes and currentDishes for equality
