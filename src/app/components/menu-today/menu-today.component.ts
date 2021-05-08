@@ -1,9 +1,13 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Dish } from 'src/app/common/dish';
 import { Menu } from 'src/app/common/menu';
+import { MenuTo } from 'src/app/common/menu-to';
+import { NotificationType } from 'src/app/enum/notification-type.enum';
 import { MenuService } from 'src/app/services/menu.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
@@ -41,7 +45,8 @@ export class MenuTodayComponent implements OnInit {
   @Input()
   restaurantId: string;
 
-  constructor(private restaurantService: RestaurantService, private menuService: MenuService, private router: Router, private formBuilder: FormBuilder) {
+  constructor(private restaurantService: RestaurantService, private menuService: MenuService, private router: Router, 
+              private formBuilder: FormBuilder, private notificationService: NotificationService) {
     
    }
 
@@ -84,12 +89,39 @@ export class MenuTodayComponent implements OnInit {
     // TODO pass currentDishes to backend
     if (this.menu.dishes.length == 0) {
       console.log("MenuTo POST for restaurant: " + this.restaurantId);
+      this.menuService.createMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
+        (response: Menu) => {
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was created`);
+          window.location.reload();
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        }
+      );
     } else if (this.currentDishes.length == 0) {
       console.log("MenuTo DELETE for restaurant: " + this.restaurantId);
+      this.menuService.deleteMenuToday(+this.restaurantId).subscribe(
+        response => {
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was deleted`);
+          window.location.reload();
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        }
+      );
     } else {
       console.log("MenuTo PUT for restaurant: " + this.restaurantId);
+      this.menuService.updateMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
+        response => {
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was updated`);
+          window.location.reload();
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        }
+      );
     }
-    window.location.reload();
+    // window.location.reload();
   }
 
   makeDishFormGroupForUpdate(dishName: string, dishPrice: number) {
@@ -108,6 +140,7 @@ export class MenuTodayComponent implements OnInit {
     });
   }
 
+  // Submit Dish From
   onSubmit() {
     if (this.dishFormGroup.invalid) {
       this.dishFormGroup.markAllAsTouched();
