@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class SearchComponent implements OnInit {
 
   showAddRestaurantButton: boolean = true;
 
-  constructor(private router: Router, private restaurantService: RestaurantService) { 
+  constructor(private router: Router, private restaurantService: RestaurantService, private authenticationService: AuthenticationService) { 
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'].includes('/restaurant-form')) {
@@ -28,5 +29,9 @@ export class SearchComponent implements OnInit {
 
   doSearch(value: string) {
     this.router.navigateByUrl(`/search/${value}`);
+  }
+  
+  isAdmin(): boolean {
+    return this.authenticationService.isAdmin();
   }
 }

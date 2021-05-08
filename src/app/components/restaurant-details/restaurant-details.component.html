@@ -8,11 +8,11 @@
 
                 <div class="col-md-6 text-right">
 
-                    <a [routerLink]="['/restaurant-form']"
+                    <a [hidden]="!isAdmin()" [routerLink]="['/restaurant-form']"
                         [queryParams]="{id: restaurant.id, name: restaurant.name, address: restaurant.address, imageUrl: restaurant.imageUrl}"
                         class="btn btn-warning mr-1"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
 
-                    <button (click)="deleteRestaurant()" class="btn btn-danger"><i class="fa fa-trash-alt"
+                    <button [hidden]="!isAdmin()" (click)="deleteRestaurant()" class="btn btn-danger"><i class="fa fa-trash-alt"
                             aria-hidden="true"></i></button>
                      
                             <!-- Show 'Vote' button based on voteButtonStatus value-->
@@ -24,7 +24,7 @@
             </div>
 
             <div class="row mb-2">
-                <h3 class="col-md-6">{{ restaurant.address }}</h3>
+                <h3 class="col-md-12">{{ restaurant.address }}</h3>
             </div>
         </div>
 

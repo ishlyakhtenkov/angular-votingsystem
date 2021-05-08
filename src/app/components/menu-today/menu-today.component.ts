@@ -6,6 +6,7 @@ import { Dish } from 'src/app/common/dish';
 import { Menu } from 'src/app/common/menu';
 import { MenuTo } from 'src/app/common/menu-to';
 import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
@@ -53,7 +54,7 @@ export class MenuTodayComponent implements OnInit {
   restaurantImageUrl: string;
 
   constructor(private restaurantService: RestaurantService, private menuService: MenuService, private router: Router, 
-              private formBuilder: FormBuilder, private notificationService: NotificationService) {
+              private formBuilder: FormBuilder, private notificationService: NotificationService, private authenticationService: AuthenticationService) {
     
    }
 
@@ -194,5 +195,9 @@ export class MenuTodayComponent implements OnInit {
   // Check menu.dishes and currentDishes for equality
   isDishArraysEqual(): boolean {
     return JSON.stringify(this.currentDishes) === JSON.stringify(this.menu.dishes);
+  }
+
+  isAdmin(): boolean {
+    return this.authenticationService.isAdmin();
   }
 }

@@ -31,7 +31,7 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'restaurant-form', component: RestaurantFormComponent},
+  {path: 'restaurant-form', component: RestaurantFormComponent, canActivate: [AuthenticationGuard]},
   {path: 'restaurants/:id', component: RestaurantDetailsComponent},
   {path: 'search/:keyword', component: RestaurantListComponent},
   {path: 'restaurants', component: RestaurantListComponent},

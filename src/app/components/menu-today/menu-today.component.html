@@ -12,7 +12,7 @@
             <tr>
                 <th style="width: 60%">Name</th>
                 <th style="width: 20%">Price</th>
-                <th style="width: 20%">Action</th>
+                <th [hidden]="!isAdmin()" style="width: 20%">Action</th>
             </tr>
         </thead>
     
@@ -20,9 +20,9 @@
             <tr *ngFor="let tempDish of currentDishes">
                 <td class="align-middle text-break">{{ tempDish.name }}</td>
                 <td class="align-middle text-break">{{ tempDish.price }} rub.</td>
-                <td class="align-middle">
-                    <button (click)="makeDishFormGroupForUpdate(tempDish.name, tempDish.price)" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addDishModal"><i class="fa fa-pencil-alt" aria-hidden="true"></i></button>            
-                    <button (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm ml-1"><i class="fa fa-minus" aria-hidden="true"></i></button>     
+                <td [hidden]="!isAdmin()" class="align-middle">
+                    <button [hidden]="!isAdmin()" (click)="makeDishFormGroupForUpdate(tempDish.name, tempDish.price)" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addDishModal"><i class="fa fa-pencil-alt" aria-hidden="true"></i></button>            
+                    <button [hidden]="!isAdmin()" (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm ml-1"><i class="fa fa-minus" aria-hidden="true"></i></button>     
                 </td>
             </tr>
         </tbody>
@@ -31,14 +31,14 @@
 
 <div class="row mt-4">
     <div class="col-md-12">
-        <button (click)="makeDishFormGroup('', 0, true)" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addDishModal">Add dish</button>
+        <button [hidden]="!isAdmin()" (click)="makeDishFormGroup('', 0, true)" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addDishModal">Add dish</button>
     </div>
 </div>
 
 <!-- Save MenuTo (current dishes), show this button only if menu.dishes and current dishes are not equal-->
 <div class="row mt-4">
     <div *ngIf="!isDishArraysEqual()" class="col-md-12">
-        <button (click)="publishTodayMenu()" class="btn btn-warning mb-2">Save changes</button>
+        <button [hidden]="!isAdmin()" (click)="publishTodayMenu()" class="btn btn-warning mb-2">Save changes</button>
     </div>
 </div>
 

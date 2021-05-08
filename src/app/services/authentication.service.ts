@@ -29,7 +29,6 @@ export class AuthenticationService {
     this.loggedInUsername = null;
     localStorage.removeItem('user');
     localStorage.removeItem('authData');
-    // localStorage.removeItem('users');
   }
 
   saveAuthData(authData: string): void {
@@ -60,6 +59,14 @@ export class AuthenticationService {
       return true;
     } else {
       this.logOut();
+      return false;
+    }
+  }
+
+  isAdmin(): boolean {
+    if (this.isUserLoggedIn()) {
+      return this.getUserFromLocalCache().roles.includes('ADMIN');
+    } else {
       return false;
     }
   }
