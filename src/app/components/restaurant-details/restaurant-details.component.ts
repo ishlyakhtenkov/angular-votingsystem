@@ -48,7 +48,7 @@ export class RestaurantDetailsComponent implements OnInit {
   deleteRestaurant() {
     this.restaurantService.deleteRestaurant(+this.restaurant.id).subscribe(
       response => {
-        this.notificationService.sendNotification(NotificationType.SUCCESS, `The restaurant was deleted`);
+        this.notificationService.sendNotification(NotificationType.SUCCESS, `The restaurant ${this.restaurant.name} was deleted`);
         this.router.navigateByUrl("/restaurants");
       },
       (errorResponse: HttpErrorResponse) => {

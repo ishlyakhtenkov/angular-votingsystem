@@ -90,7 +90,7 @@ export class MenuTodayComponent implements OnInit {
     console.log("MenuTo POST for restaurant: " + this.restaurantId);
       this.menuService.createMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
         (response: Menu) => {
-          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was created`);
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu for ${this.restaurantName} was created`);
           this.reloadRestaurantComponent();
         },
         (errorResponse: HttpErrorResponse) => {
@@ -103,7 +103,7 @@ export class MenuTodayComponent implements OnInit {
     console.log("MenuTo PUT for restaurant: " + this.restaurantId);
       this.menuService.updateMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
         response => {
-          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was updated`);
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu for ${this.restaurantName} was updated`);
           this.reloadRestaurantComponent();
         },
         (errorResponse: HttpErrorResponse) => {
@@ -116,7 +116,7 @@ export class MenuTodayComponent implements OnInit {
     console.log("MenuTo DELETE for restaurant: " + this.restaurantId);
       this.menuService.deleteMenuToday(+this.restaurantId).subscribe(
         response => {
-          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was deleted`);
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu for ${this.restaurantName} was deleted`);
           this.reloadRestaurantComponent();          
         },
         (errorResponse: HttpErrorResponse) => {
