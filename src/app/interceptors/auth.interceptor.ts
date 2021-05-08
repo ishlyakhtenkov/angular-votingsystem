@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
     this.authenticationService.loadAuthData();
     const authData = this.authenticationService.getAuthData();
     const request = httpRequest.clone({setHeaders: {Authorization: `Basic ${authData}`}});
-
+    
     return httpHandler.handle(request);
   }
 }

@@ -13,7 +13,7 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getUser(): Observable<User | HttpErrorResponse> {
+  getUser(): Observable<User> {
     return this.httpClient.get<User>(this.profileUrl); 
   }
 
