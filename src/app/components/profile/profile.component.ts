@@ -7,6 +7,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,8 @@ export class ProfileComponent implements OnInit {
 
   user: User;
 
-  constructor(private userService: UserService, private authenticationService: AuthenticationService, private notificationService: NotificationService, private location: Location) { }
+  constructor(private userService: UserService, private authenticationService: AuthenticationService, 
+              private notificationService: NotificationService, private location: Location, private router: Router) { }
 
   ngOnInit(): void {
     this.userService.getUser().subscribe(
@@ -39,6 +41,19 @@ export class ProfileComponent implements OnInit {
         this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
       }
     )
+  }
+
+  deleteProfile() {
+    this.userService.deleteUser().subscribe(
+      response => {
+        this.notificationService.sendNotification(NotificationType.SUCCESS, `The profile was deleted`);
+        this.authenticationService.logOut();
+        this.router.navigateByUrl("/restaurants");
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+      }
+    );
   }
 
   back(): void {
