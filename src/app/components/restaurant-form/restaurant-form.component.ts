@@ -65,33 +65,25 @@ export class RestaurantFormComponent implements OnInit {
         console.log("Create new restaurant POST");
         this.restaurantService.createRestaurant(theRestaurant).subscribe(
           (response: Restaurant) => {
-            this.sendNotification(NotificationType.SUCCESS, `A new restaurant ${response.name} was created`);
+            this.notificationService.sendNotification(NotificationType.SUCCESS, `A new restaurant ${response.name} was created`);
             this.router.navigate([`/restaurants/${response.id}`], {queryParams: {id: response.id, name: response.name, address: response.address, imageUrl: response.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+            this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
           }
         );
       } else {
         console.log("Update the restaurant PUT");
         this.restaurantService.updateRestaurant(theRestaurant).subscribe(
           response => {
-            this.sendNotification(NotificationType.SUCCESS, `The restaurant was updated`);
+            this.notificationService.sendNotification(NotificationType.SUCCESS, `The restaurant was updated`);
             this.router.navigate([`/restaurants/${theRestaurant.id}`], {queryParams: {id: theRestaurant.id, name: theRestaurant.name, address: theRestaurant.address, imageUrl: theRestaurant.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
-            this.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+            this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
           }
         );
       }
-    }
-  }
-
-  private sendNotification(notificationType: NotificationType, message: string) {
-    if (message) {
-      this.notificationService.notify(notificationType, message);
-    } else {
-      this.notificationService.notify(notificationType, 'An error occured. Please try again');
     }
   }
 }

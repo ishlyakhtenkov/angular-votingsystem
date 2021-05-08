@@ -12,4 +12,12 @@ export class NotificationService {
   notify(type: NotificationType, message: string) {
     this.notifier.notify(type, message);
   }
+
+  sendNotification(notificationType: NotificationType, message: string) {
+    if (message) {
+      this.notify(notificationType, message);
+    } else {
+      this.notify(notificationType, 'An error occured. Please try again');
+    }
+  }
 }

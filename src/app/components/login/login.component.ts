@@ -43,19 +43,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.showLoading = false;
         },
         (errorResponse: HttpErrorResponse) => {
-          this.sendErrorNotification(NotificationType.ERROR, errorResponse.error.details);
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
           this.showLoading = false;
         }
       )
     );
-  }
-
-  private sendErrorNotification(notificationType: NotificationType, message: string) {
-    if (message) {
-      this.notificationService.notify(notificationType, message);
-    } else {
-      this.notificationService.notify(notificationType, 'An error occured. Please try again');
-    }
   }
 
   ngOnDestroy(): void {

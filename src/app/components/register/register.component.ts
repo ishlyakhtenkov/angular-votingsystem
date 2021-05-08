@@ -34,23 +34,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.authenticationService.register(userTo).subscribe(
         (response: User) => {
           this.showLoading = false;
-          this.sendNotification(NotificationType.SUCCESS, `A new account was created for ${response.email}`);
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `A new account was created for ${response.email}`);
           this.router.navigateByUrl("/login");
         },
         (errorResponse: HttpErrorResponse) => {
-          this.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
           this.showLoading = false;
         }
       )
     );
-  }
-
-  private sendNotification(notificationType: NotificationType, message: string) {
-    if (message) {
-      this.notificationService.notify(notificationType, message);
-    } else {
-      this.notificationService.notify(notificationType, 'An error occured. Please try again');
-    }
   }
 
   ngOnDestroy(): void {
