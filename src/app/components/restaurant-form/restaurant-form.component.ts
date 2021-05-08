@@ -65,7 +65,7 @@ export class RestaurantFormComponent implements OnInit {
                                   {queryParams: {id: response.id, name: response.name, address: response.address, imageUrl: response.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
-            this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+            this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
           }
         );
       } else {
@@ -76,7 +76,7 @@ export class RestaurantFormComponent implements OnInit {
                                   {queryParams: {id: theRestaurant.id, name: theRestaurant.name, address: theRestaurant.address, imageUrl: theRestaurant.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
-            this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+            this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
           }
         );
       }

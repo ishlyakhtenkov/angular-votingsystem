@@ -52,7 +52,7 @@ export class RestaurantDetailsComponent implements OnInit {
         this.router.navigateByUrl("/restaurants");
       },
       (errorResponse: HttpErrorResponse) => {
-        this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
       }
     );
   }
@@ -64,7 +64,7 @@ export class RestaurantDetailsComponent implements OnInit {
         this.notificationService.sendNotification(NotificationType.SUCCESS, `Your vote has been counted!`);
       },
       (errorResponse: HttpErrorResponse) => {
-        this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
       }
     );
   }

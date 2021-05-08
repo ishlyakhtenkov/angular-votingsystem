@@ -13,6 +13,15 @@ export class NotificationService {
     this.notifier.notify(type, message);
   }
 
+  sendNotifications(notificationType: NotificationType, messages: string[]) {
+    if (messages) {
+      for (let tempMessage of messages)
+      this.notify(notificationType, tempMessage);
+    } else {
+      this.notify(notificationType, 'An error occured. Please try again');
+    }
+  }
+
   sendNotification(notificationType: NotificationType, message: string) {
     if (message) {
       this.notify(notificationType, message);
