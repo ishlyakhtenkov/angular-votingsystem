@@ -38,7 +38,7 @@
 <!-- Save MenuTo (current dishes), show this button only if menu.dishes and current dishes are not equal-->
 <div class="row mt-4">
     <div *ngIf="!isDishArraysEqual()" class="col-md-12">
-        <button (click)="publishMenuTo()" class="btn btn-warning mb-2">Save changes</button>
+        <button (click)="publishTodayMenu()" class="btn btn-warning mb-2">Save changes</button>
     </div>
 </div>
 

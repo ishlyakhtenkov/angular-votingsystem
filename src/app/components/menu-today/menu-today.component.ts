@@ -42,8 +42,15 @@ export class MenuTodayComponent implements OnInit {
   // This value stores old name of updated dish that comes from modal form (it needs for duplicate dish name validator, and for update dish in currentDishes array)
   updatedDishOldName: string;
 
+  // Inject restaurant data from parent component
   @Input()
   restaurantId: string;
+  @Input()
+  restaurantName: string;
+  @Input()
+  restaurantAddress: string;
+  @Input()
+  restaurantImageUrl: string;
 
   constructor(private restaurantService: RestaurantService, private menuService: MenuService, private router: Router, 
               private formBuilder: FormBuilder, private notificationService: NotificationService) {
@@ -69,6 +76,65 @@ export class MenuTodayComponent implements OnInit {
     );
   }
 
+  publishTodayMenu() {
+    if (this.menu.dishes.length == 0) {
+      this.createTodayMenu();
+    } else if (this.currentDishes.length == 0) {
+      this.deleteTodayMenu();
+    } else {
+      this.updateTodayMenu();
+    }
+  }
+
+  private createTodayMenu() {
+    console.log("MenuTo POST for restaurant: " + this.restaurantId);
+      this.menuService.createMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
+        (response: Menu) => {
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was created`);
+          this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
+            this.router.navigate([`/restaurants/${this.restaurantId}`], 
+            {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
+          });
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        }
+      );
+  }
+
+  private updateTodayMenu() {
+    console.log("MenuTo PUT for restaurant: " + this.restaurantId);
+      this.menuService.updateMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
+        response => {
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was updated`);
+          this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
+            this.router.navigate([`/restaurants/${this.restaurantId}`], 
+            {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
+          });
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        }
+      );
+  }
+
+  private deleteTodayMenu() {
+    console.log("MenuTo DELETE for restaurant: " + this.restaurantId);
+      this.menuService.deleteMenuToday(+this.restaurantId).subscribe(
+        response => {
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was deleted`);
+          this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
+            this.router.navigate([`/restaurants/${this.restaurantId}`], 
+            {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
+          });
+          
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+        }
+      );
+  }
+
   // Getters for Dish FormGroup values
   get name() {
     return this.dishFormGroup.get('dish.name');
@@ -83,45 +149,6 @@ export class MenuTodayComponent implements OnInit {
     if (index != -1) {
       this.currentDishes.splice(index, 1);
     }
-  }
-
-  publishMenuTo() {
-    // TODO pass currentDishes to backend
-    if (this.menu.dishes.length == 0) {
-      console.log("MenuTo POST for restaurant: " + this.restaurantId);
-      this.menuService.createMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
-        (response: Menu) => {
-          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was created`);
-          window.location.reload();
-        },
-        (errorResponse: HttpErrorResponse) => {
-          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
-        }
-      );
-    } else if (this.currentDishes.length == 0) {
-      console.log("MenuTo DELETE for restaurant: " + this.restaurantId);
-      this.menuService.deleteMenuToday(+this.restaurantId).subscribe(
-        response => {
-          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was deleted`);
-          window.location.reload();
-        },
-        (errorResponse: HttpErrorResponse) => {
-          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
-        }
-      );
-    } else {
-      console.log("MenuTo PUT for restaurant: " + this.restaurantId);
-      this.menuService.updateMenuToday(+this.restaurantId, new MenuTo(this.currentDishes)).subscribe(
-        response => {
-          this.notificationService.sendNotification(NotificationType.SUCCESS, `Today's menu was updated`);
-          window.location.reload();
-        },
-        (errorResponse: HttpErrorResponse) => {
-          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
-        }
-      );
-    }
-    // window.location.reload();
   }
 
   makeDishFormGroupForUpdate(dishName: string, dishPrice: number) {
@@ -163,7 +190,7 @@ export class MenuTodayComponent implements OnInit {
     }
   }
 
-  sortDishesArray(dishes: Dish[]) {
+  private sortDishesArray(dishes: Dish[]) {
     dishes.sort((dish1, dish2) => dish1.name.localeCompare(dish2.name));
   }
 
