@@ -38,7 +38,8 @@ export class RestaurantFormComponent implements OnInit {
   }
 
   handleRestaurantDetails() {
-    let imageUrl = this.route.snapshot.queryParamMap.has('imageUrl') ? this.route.snapshot.queryParamMap.get('imageUrl') : 'assets/images/default-restaurant-image.jpg';
+    let imageUrl = this.route.snapshot.queryParamMap.has('imageUrl') ? this.route.snapshot.queryParamMap.get('imageUrl') : this.getRandomImageUrl();
+    console.log(imageUrl);
     this.restaurant = new Restaurant(this.route.snapshot.queryParamMap.get('id'), this.route.snapshot.queryParamMap.get('name'), 
                                      this.route.snapshot.queryParamMap.get('address'), imageUrl);
   }
@@ -81,5 +82,11 @@ export class RestaurantFormComponent implements OnInit {
         );
       }
     }
+  }
+
+  // generate random image url for restaurant
+  private getRandomImageUrl(): string {
+    const randomNumber = Math.round(Math.random() * 9);
+    return `assets/images/default-restaurant-image-${randomNumber}.jpg`;
   }
 }

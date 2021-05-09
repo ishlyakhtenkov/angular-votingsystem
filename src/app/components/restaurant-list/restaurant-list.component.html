@@ -10,9 +10,9 @@
 
             <a [routerLink]="['/restaurants/{{ tempRestaurant.id }}']"
                 [queryParams]="{id: tempRestaurant.id, name: tempRestaurant.name, address: tempRestaurant.address, imageUrl: tempRestaurant.imageUrl}">
-                <h1>{{ tempRestaurant.name }}</h1>
+                <h1 class="text-truncate">{{ tempRestaurant.name }}</h1>
             </a>
-            <h3>{{ tempRestaurant.address }}</h3>
+            <h3 class="text-truncate">{{ tempRestaurant.address }}</h3>
         </div>
     </div>
 
