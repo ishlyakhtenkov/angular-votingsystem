@@ -23,8 +23,13 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getUser().subscribe(
-      data => {
-        this.user = data;
+      (response: User) => {
+        this.user = response;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.authenticationService.logOut();
+        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+        this.router.navigateByUrl("/login");
       }
     );
   }
