@@ -35,7 +35,10 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile(theUserTo: UserTo): void {
-    let userTo = new UserTo(this.user.id, theUserTo.name, theUserTo.email, theUserTo.password);
+    if (+this.user.id == 100000 || +this.user.id == 100001) {
+      this.notificationService.sendNotification(NotificationType.ERROR, `Test profile cannot be updated!`);
+    } else {
+      let userTo = new UserTo(this.user.id, theUserTo.name, theUserTo.email, theUserTo.password);
     this.userService.updateUser(userTo).subscribe(
       response => {
         this.notificationService.sendNotification(NotificationType.SUCCESS, `The profile was updated`);
@@ -43,9 +46,10 @@ export class ProfileComponent implements OnInit {
         this.authenticationService.saveAuthData(authData);
       },
       (errorResponse: HttpErrorResponse) => {
-        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+        this.handleErrorResponse(errorResponse);
       }
     )
+    }
   }
 
   logOut(): void {
@@ -55,20 +59,33 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteProfile(): void {
-    this.userService.deleteUser().subscribe(
-      response => {
-        this.notificationService.sendNotification(NotificationType.SUCCESS, `The profile was deleted`);
-        this.authenticationService.logOut();
-        this.router.navigateByUrl("/restaurants");
-      },
-      (errorResponse: HttpErrorResponse) => {
-        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
-      }
-    );
+    if (+this.user.id == 100000 || +this.user.id == 100001) {
+      this.notificationService.sendNotification(NotificationType.ERROR, `Test profile cannot be deleted!`);
+    } else {
+      this.userService.deleteUser().subscribe(
+        response => {
+          this.notificationService.sendNotification(NotificationType.SUCCESS, `The profile was deleted`);
+          this.authenticationService.logOut();
+          this.router.navigateByUrl("/restaurants");
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.handleErrorResponse(errorResponse);
+        }
+      );
+    }
   }
 
   back(): void {
     this.location.back()
   }
 
+  private handleErrorResponse(errorResponse: HttpErrorResponse): void {
+    if (errorResponse.status == 401) {
+      this.authenticationService.logOut();
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+      this.router.navigateByUrl("/login");
+    } else {
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+    }
+  }
 }

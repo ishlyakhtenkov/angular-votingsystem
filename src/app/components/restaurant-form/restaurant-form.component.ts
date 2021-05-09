@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Restaurant } from 'src/app/common/restaurant';
 import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
@@ -20,7 +21,7 @@ export class RestaurantFormComponent implements OnInit {
   restaurantFormGroup: FormGroup;
 
   constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder, 
-              private restaurantService: RestaurantService, private notificationService: NotificationService) { }
+              private restaurantService: RestaurantService, private notificationService: NotificationService, private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(
@@ -66,7 +67,7 @@ export class RestaurantFormComponent implements OnInit {
                                   {queryParams: {id: response.id, name: response.name, address: response.address, imageUrl: response.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
-            this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+            this.handleErrorResponse(errorResponse);
           }
         );
       } else {
@@ -77,7 +78,7 @@ export class RestaurantFormComponent implements OnInit {
                                   {queryParams: {id: theRestaurant.id, name: theRestaurant.name, address: theRestaurant.address, imageUrl: theRestaurant.imageUrl}});
           },
           (errorResponse: HttpErrorResponse) => {
-            this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+            this.handleErrorResponse(errorResponse);
           }
         );
       }
@@ -88,5 +89,15 @@ export class RestaurantFormComponent implements OnInit {
   private getRandomImageUrl(): string {
     const randomNumber = Math.round(Math.random() * 9);
     return `assets/images/default-restaurant-image-${randomNumber}.jpg`;
+  }
+
+  private handleErrorResponse(errorResponse: HttpErrorResponse): void {
+    if (errorResponse.status == 401) {
+      this.authenticationService.logOut();
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+      this.router.navigateByUrl("/login");
+    } else {
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+    }
   }
 }

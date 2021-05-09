@@ -95,7 +95,7 @@ export class MenuTodayComponent implements OnInit {
           this.reloadRestaurantComponent();
         },
         (errorResponse: HttpErrorResponse) => {
-          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+          this.handleErrorResponse(errorResponse);
         }
       );
   }
@@ -108,7 +108,7 @@ export class MenuTodayComponent implements OnInit {
           this.reloadRestaurantComponent();
         },
         (errorResponse: HttpErrorResponse) => {
-          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+          this.handleErrorResponse(errorResponse);
         }
       );
   }
@@ -121,7 +121,7 @@ export class MenuTodayComponent implements OnInit {
           this.reloadRestaurantComponent();          
         },
         (errorResponse: HttpErrorResponse) => {
-          this.notificationService.sendNotification(NotificationType.ERROR, errorResponse.error.details);
+          this.handleErrorResponse(errorResponse);
         }
       );
   }
@@ -200,5 +200,15 @@ export class MenuTodayComponent implements OnInit {
 
   isAdmin(): boolean {
     return this.authenticationService.isAdmin();
+  }
+
+  private handleErrorResponse(errorResponse: HttpErrorResponse): void {
+    if (errorResponse.status == 401) {
+      this.authenticationService.logOut();
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+      this.router.navigateByUrl("/login");
+    } else {
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+    }
   }
 }

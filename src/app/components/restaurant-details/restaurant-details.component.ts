@@ -61,20 +61,19 @@ export class RestaurantDetailsComponent implements OnInit {
         this.router.navigateByUrl("/restaurants");
       },
       (errorResponse: HttpErrorResponse) => {
-        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+        this.handleErrorResponse(errorResponse);
       }
     );
   }
 
   voteForRestaurant() {
     if (this.authenticationService.isUserLoggedIn()) {
-      console.log("Vote for restaurant: id=" + this.restaurant.id);
       this.voteService.registerVote(+this.restaurant.id).subscribe(
         (response: Vote) => {
           this.notificationService.sendNotification(NotificationType.SUCCESS, `Your vote has been counted!`);
         },
         (errorResponse: HttpErrorResponse) => {
-          this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+          this.handleErrorResponse(errorResponse);
         }
       );
     } else {
@@ -84,5 +83,15 @@ export class RestaurantDetailsComponent implements OnInit {
 
   isAdmin(): boolean {
     return this.authenticationService.isAdmin();
+  }
+
+  private handleErrorResponse(errorResponse: HttpErrorResponse): void {
+    if (errorResponse.status == 401) {
+      this.authenticationService.logOut();
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+      this.router.navigateByUrl("/login");
+    } else {
+      this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+    }
   }
 }
