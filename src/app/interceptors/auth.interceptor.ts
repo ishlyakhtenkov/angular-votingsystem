@@ -14,13 +14,13 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService) {}
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
-    if (httpRequest.url.includes('http://localhost:8080/votingsystem/rest/profile/login')) {
+    if (httpRequest.url.includes('http://localhost:8081/votingsystem/rest/profile/login')) {
       return httpHandler.handle(httpRequest);
     }
-    if (httpRequest.url.includes('http://localhost:8080/votingsystem/rest/profile/register')) {
+    if (httpRequest.url.includes('http://localhost:8081/votingsystem/rest/profile/register')) {
       return httpHandler.handle(httpRequest);
     }
-    if (httpRequest.url.includes('http://localhost:8080/votingsystem/rest/restaurants') && httpRequest.method == 'GET') {
+    if (httpRequest.url.includes('http://localhost:8081/votingsystem/rest/restaurants') && httpRequest.method == 'GET') {
       return httpHandler.handle(httpRequest);
     }
 

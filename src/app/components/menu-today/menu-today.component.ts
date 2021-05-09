@@ -48,10 +48,10 @@ export class MenuTodayComponent implements OnInit {
   restaurantId: string;
   @Input()
   restaurantName: string;
-  @Input()
-  restaurantAddress: string;
-  @Input()
-  restaurantImageUrl: string;
+  // @Input()
+  // restaurantAddress: string;
+  // @Input()
+  // restaurantImageUrl: string;
 
   constructor(private restaurantService: RestaurantService, private menuService: MenuService, private router: Router, 
               private formBuilder: FormBuilder, private notificationService: NotificationService, private authenticationService: AuthenticationService) {
@@ -187,8 +187,9 @@ export class MenuTodayComponent implements OnInit {
 
   private reloadRestaurantComponent() {
     this.router.navigateByUrl('/restaurants', {skipLocationChange: true}).then(() => {
-      this.router.navigate([`/restaurants/${this.restaurantId}`], 
-      {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
+      this.router.navigateByUrl(`/restaurants/${this.restaurantId}`);
+      // this.router.navigate([`/restaurants/${this.restaurantId}`], 
+      // {queryParams: {id: this.restaurantId, name: this.restaurantName, address: this.restaurantAddress, imageUrl: this.restaurantImageUrl}});
     });
   }
 

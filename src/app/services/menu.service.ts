@@ -9,7 +9,7 @@ import { MenuTo } from '../common/menu-to';
 })
 export class MenuService {
 
-  private baseUrl = 'http://localhost:8080/votingsystem/rest/restaurants';
+  private baseUrl = 'http://localhost:8081/votingsystem/rest/restaurants';
 
   constructor(private httpClient: HttpClient) { }
 

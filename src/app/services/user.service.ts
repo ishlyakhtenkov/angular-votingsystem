@@ -9,7 +9,7 @@ import { UserTo } from '../common/user-to';
 })
 export class UserService {
 
-  private profileUrl = 'http://localhost:8080/votingsystem/rest/profile';
+  private profileUrl = 'http://localhost:8081/votingsystem/rest/profile';
 
   constructor(private httpClient: HttpClient) { }
 

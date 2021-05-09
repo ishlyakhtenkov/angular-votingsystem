@@ -8,7 +8,7 @@ import { Vote } from '../common/vote';
 })
 export class VoteService {
 
-  private baseUrl = 'http://localhost:8080/votingsystem/rest/votes';
+  private baseUrl = 'http://localhost:8081/votingsystem/rest/votes';
 
   constructor(private httpClient: HttpClient) { }
 

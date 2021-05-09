@@ -35,8 +35,16 @@ export class RestaurantDetailsComponent implements OnInit {
   }
 
   handleRestaurantDetails() {
-    this.restaurant = new Restaurant(this.route.snapshot.queryParamMap.get('id'), this.route.snapshot.queryParamMap.get('name'),
-      this.route.snapshot.queryParamMap.get('address'), this.route.snapshot.queryParamMap.get('imageUrl'));
+    const theRestaurantId: number = +this.route.snapshot.paramMap.get('id');
+    this.restaurantService.getRestaurant(theRestaurantId).subscribe(
+      (response: Restaurant) => {
+        this.restaurant = response;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.notificationService.sendNotifications(NotificationType.ERROR, errorResponse.error.details);
+        this.router.navigateByUrl("/restaurants");
+      }
+    );
   }
 
   // subscribe for voteButtonStatus from restaurant service
