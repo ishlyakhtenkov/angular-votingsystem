@@ -8,7 +8,7 @@ import { Restaurant } from '../common/restaurant';
 })
 export class RestaurantService {
   
-  private baseUrl = 'http://localhost:8081/votingsystem/rest/restaurants';
+  private baseUrl = '/votingsystem/rest/restaurants';
 
   voteButtonStatus: Subject<boolean> = new Subject<boolean>();
 
