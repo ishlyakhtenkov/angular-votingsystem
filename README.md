@@ -1,27 +1,15 @@
-# AngularVotingsystem
+Restaurant Voting System project 
+=================================
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.10.
+This is the frontend part of Restaurant Voting System designed for deciding where to have lunch.
 
-## Development server
+### Technology stack used: 
+* Angular 2
+* Bootstrap
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Project key logic:
+* System main purpose: View information about restaurants and their lunch menu of the day. Vote for your favorite restaurant.
+* There are 3 types of users: admin, authorized users and anonymous users.
+* Admins can create/update/delete restaurants, and manage their lunch menu of the day.
+* Authorized users can view information about restaurants and their lunch menu of the day. They can vote for the restaurant they want to have lunch in. Also they can manage their profile and change their password.
+* Anonymous users can only view information about restaurants and their lunch menu of the day.
