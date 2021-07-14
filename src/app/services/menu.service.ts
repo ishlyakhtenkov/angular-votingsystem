@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Menu } from '../common/menu';
 import { MenuTo } from '../common/menu-to';
 
@@ -9,7 +10,7 @@ import { MenuTo } from '../common/menu-to';
 })
 export class MenuService {
 
-  private baseUrl = '/votingsystem/rest/restaurants';
+  private baseUrl = `${environment.apiUrl}/restaurants`;
 
   constructor(private httpClient: HttpClient) { }
 

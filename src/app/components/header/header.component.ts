@@ -18,6 +18,10 @@ export class HeaderComponent implements OnInit {
     return this.authenticationService.isUserLoggedIn();
   }
 
+  isLoginOrRegisterPage(): boolean {
+    return (this.router.url.includes('/login') || this.router.url.includes('/register'));
+  }
+ 
   routeToLogin(): void {
     console.log(this.router.url);
     this.router.navigate([`/login`], 

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Vote } from '../common/vote';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Vote } from '../common/vote';
 })
 export class VoteService {
 
-  private baseUrl = '/votingsystem/rest/votes';
+  private baseUrl = `${environment.apiUrl}/votes`;
 
   constructor(private httpClient: HttpClient) { }
 

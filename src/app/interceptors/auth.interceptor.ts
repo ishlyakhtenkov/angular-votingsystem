@@ -7,20 +7,23 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../services/authentication.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
+  private host = environment.apiUrl;
+
   constructor(private authenticationService: AuthenticationService) {}
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
-    if (httpRequest.url.includes('/votingsystem/rest/profile/login')) {
+    if (httpRequest.url.includes(`${this.host}/profile/login`)) {
       return httpHandler.handle(httpRequest);
     }
-    if (httpRequest.url.includes('/votingsystem/rest/profile/register')) {
+    if (httpRequest.url.includes(`${this.host}/profile/register`)) {
       return httpHandler.handle(httpRequest);
     }
-    if (httpRequest.url.includes('/votingsystem/rest/restaurants') && httpRequest.method == 'GET') {
+    if (httpRequest.url.includes(`${this.host}/restaurants`) && httpRequest.method == 'GET') {
       return httpHandler.handle(httpRequest);
     }
 

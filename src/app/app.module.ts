@@ -21,7 +21,6 @@ import { NotificationService } from './services/notification.service';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProfileComponent } from './components/profile/profile.component';
 import { MenuService } from './services/menu.service';
@@ -50,7 +49,6 @@ const routes: Routes = [
     LoginComponent,
     RegisterComponent,
     HeaderComponent,
-    FooterComponent,
     ProfileComponent
   ],
   imports: [

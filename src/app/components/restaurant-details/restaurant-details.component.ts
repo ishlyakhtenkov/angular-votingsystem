@@ -17,6 +17,7 @@ import { VoteService } from 'src/app/services/vote.service';
 export class RestaurantDetailsComponent implements OnInit {
 
   restaurant: Restaurant;
+  restaurantId: string;
 
   // This value defines show/not show 'Vote' button on restaurant details component
   voteButtonStatus: boolean = false;
@@ -25,6 +26,7 @@ export class RestaurantDetailsComponent implements OnInit {
     private notificationService: NotificationService, private voteService: VoteService, private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    this.restaurantId = this.route.snapshot.paramMap.get('id');
     this.route.paramMap.subscribe(
       () => {
         this.handleRestaurantDetails();
@@ -35,8 +37,7 @@ export class RestaurantDetailsComponent implements OnInit {
   }
 
   handleRestaurantDetails() {
-    const theRestaurantId: number = +this.route.snapshot.paramMap.get('id');
-    this.restaurantService.getRestaurant(theRestaurantId).subscribe(
+    this.restaurantService.getRestaurant(+this.restaurantId).subscribe(
       (response: Restaurant) => {
         this.restaurant = response;
       },

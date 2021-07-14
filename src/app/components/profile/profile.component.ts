@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
       let userTo = new UserTo(this.user.id, theUserTo.name, theUserTo.email, theUserTo.password);
     this.userService.updateUser(userTo).subscribe(
       response => {
+        this.user.name = theUserTo.name;
         this.notificationService.sendNotification(NotificationType.SUCCESS, `The profile was updated`);
         const authData = window.btoa(theUserTo.email + ':' + theUserTo.password);
         this.authenticationService.saveAuthData(authData);
@@ -55,7 +56,7 @@ export class ProfileComponent implements OnInit {
   logOut(): void {
     this.authenticationService.logOut();
     this.notificationService.sendNotification(NotificationType.SUCCESS, 'You have been logged out');
-    this.router.navigateByUrl("/restaurants");
+    this.router.navigateByUrl("/login");
   }
 
   deleteProfile(): void {

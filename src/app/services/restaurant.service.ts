@@ -1,6 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Restaurant } from '../common/restaurant';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Restaurant } from '../common/restaurant';
 })
 export class RestaurantService {
   
-  private baseUrl = '/votingsystem/rest/restaurants';
+  private baseUrl = `${environment.apiUrl}/restaurants`;
 
   voteButtonStatus: Subject<boolean> = new Subject<boolean>();
 

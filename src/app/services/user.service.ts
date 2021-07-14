@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { User } from '../common/user';
 import { UserTo } from '../common/user-to';
 
@@ -9,7 +10,7 @@ import { UserTo } from '../common/user-to';
 })
 export class UserService {
 
-  private profileUrl = '/votingsystem/rest/profile';
+  private profileUrl = `${environment.apiUrl}/profile`;
 
   constructor(private httpClient: HttpClient) { }
 
