@@ -7,26 +7,28 @@
 </div>
 
 <div *ngIf="currentDishes?.length > 0" class="container">
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th style="width: 60%">Name</th>
-                <th style="width: 20%">Price</th>
-                <th [hidden]="!isAdmin()" style="width: 20%">Action</th>
-            </tr>
-        </thead>
-    
-        <tbody>
-            <tr *ngFor="let tempDish of currentDishes">
-                <td class="align-middle text-break">{{ tempDish.name }}</td>
-                <td class="align-middle text-break">{{ tempDish.price }} rub.</td>
-                <td [hidden]="!isAdmin()" class="align-middle">
-                    <button [hidden]="!isAdmin()" (click)="makeDishFormGroupForUpdate(tempDish.name, tempDish.price)" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addDishModal"><i class="fa fa-pencil-alt" aria-hidden="true"></i></button>            
-                    <button [hidden]="!isAdmin()" (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm ml-1"><i class="fa fa-minus" aria-hidden="true"></i></button>     
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" [hidden]="!isAdmin()">Action</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                <tr *ngFor="let tempDish of currentDishes">
+                    <td class="align-middle text-nowrap">{{ tempDish.name }}</td>
+                    <td class="align-middle text-nowrap">{{ tempDish.price }} rub.</td>
+                    <td [hidden]="!isAdmin()" class="align-middle text-nowrap">
+                        <button [hidden]="!isAdmin()" (click)="makeDishFormGroupForUpdate(tempDish.name, tempDish.price)" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addDishModal"><i class="fa fa-pencil-alt" aria-hidden="true"></i></button>            
+                        <button [hidden]="!isAdmin()" (click)="deleteDish(tempDish.name)" class="btn btn-danger btn-sm ml-1"><i class="fa fa-minus" aria-hidden="true"></i></button>     
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="row mt-4">

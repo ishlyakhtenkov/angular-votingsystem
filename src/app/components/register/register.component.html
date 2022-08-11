@@ -3,7 +3,7 @@
         <div class="user_card">
           <div class="d-flex justify-content-center">
             <div style="margin-top: 10px;margin-bottom:-90px;">
-                <h3>Restaurant Voting System</h3>
+                <h3>Restaurant Aggregator</h3>
             </div>
           </div>
           <div class="d-flex justify-content-center form_container">
@@ -39,8 +39,8 @@
               <span class="help-block" *ngIf="(passwordInput.value != repeatPasswordInput.value) && (repeatPasswordInput.value != '')" style="color:red;">Passwords do not match</span>
           <div class="d-flex justify-content-center mt-3 login_container">
             <button [disabled]="registerForm.invalid || showLoading" type="submit" name="button" class="btn login_btn">
-              <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>&nbsp;&nbsp;
-              <span *ngIf="showLoading">Loading...</span>
+              <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>
+              <span *ngIf="showLoading">&nbsp;&nbsp;Loading...</span>
               <span *ngIf="!showLoading">Register</span>
             </button>
           </div>
